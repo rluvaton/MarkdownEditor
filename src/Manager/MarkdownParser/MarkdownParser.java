@@ -18,8 +18,15 @@ public class MarkdownParser
 
         // Code Section
 
+        // Format Photos
+        formatted = formatPhotos(text, formatted);
+
+        // Format Links
         formatted = formatLinks(text, formatted);
+
+        // Format Heading
         formatted = formatHeading(text, formatted);
+
 
         return formatted;
     }
@@ -53,6 +60,38 @@ public class MarkdownParser
                                           "</a>");
         }
         
+        return (formatted);
+    }
+
+    /**
+     * FormatLinks - Formatting Photos To HTML
+     * @param text - Original Text
+     * @param formatted - Formatted Text Until Then
+     * @return - After Add Photos HTML Tags
+     * @MatchingPattern - XX ![text](link) XX
+     */
+    public String formatPhotos(String text, String formatted)
+    {
+        // Variable Definition
+        String regex = "(^|\\W|^\\.)+(!\\[(.*?)\\]\\((.*?)\\))($|\\W)+";  // Pattern For Matching [xx](yy)
+
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(text);
+
+        // Code Section
+
+        while (matcher.find())
+        {
+            // matcher.group(2) -> [text](link)
+            // matcher.group(3) -> Text
+            // matcher.group(4) -> Link
+
+            formatted = formatted.replace(matcher.group(2),
+                    "<img src = \"" + matcher.group(4) + "\" alt = \"" + matcher.group(3) +"\">");
+        }
+
+        System.out.println(formatted);
+
         return (formatted);
     }
 
@@ -102,6 +141,4 @@ public class MarkdownParser
 
         return (formatted);
     }
-    
-
 }
