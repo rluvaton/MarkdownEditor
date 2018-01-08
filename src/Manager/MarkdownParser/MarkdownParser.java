@@ -16,6 +16,7 @@ public class MarkdownParser
     {
         // TODO - Add The Default Style At The Beginning
         this.textFormat = "";
+        System.out.println(formatPhotos("  ![dscd](DDS)"));
     }
 
     public MarkdownParser(String text)
@@ -32,23 +33,29 @@ public class MarkdownParser
 
         // region Calling Format Functions
 
+        // TODO - Don't Check Between Code Tags
+
+        // Format Horizontal Line
+        formatted = formatHorLine(formatted);
+
         // Format Photos
-        formatted = formatPhotos(text, formatted);
+        formatted = formatPhotos(formatted);
 
         // Format Links
-        formatted = formatLinks(text, formatted);
+        formatted = formatLinks(formatted);
 
         // Format Heading
-        formatted = formatHeading(text, formatted);
+        formatted = formatHeading(formatted);
 
         // Format Italic
-        formatted = formatItalic(text, formatted);
+        formatted = formatItalic(formatted);
 
         // Format Bold
-        formatted = formatBold(text, formatted);
+        formatted = formatBold(formatted);
 
         // Format Strike Through
-        formatted = formatStrikeThrough(text, formatted);
+        formatted = formatStrikeThrough(formatted);
+
 
         // region TODO - Markdown Rules
         // TODO - Lists
@@ -56,10 +63,9 @@ public class MarkdownParser
         //   TODO - Ordered List             -  number.
         // TODO - CODE
         //   TODO - 1 Line Code              - ``
-        //   TODO - Multiline Code           - ``` lang
+        //   TODO - Multiline Code           - ``` lang - REGEX FOR GETTING CODE: ALMOST (?:\`\`\`(.*)\n(\n*.*\n*)\n+\`\`\`)
         // TODO - Tables
         // TODO - Blockquote                 - >
-        // TODO - Horizontal Line            - *** or more
         // TODO - Line Breaks                - 2 Spaces
         // TODO - Embedded content           - {content} new line between each {
         // endregion
@@ -72,18 +78,17 @@ public class MarkdownParser
     // region Formatting Functions
     /**
      * FormatLinks - Formatting Links To HTML
-     * @param text - Original Text
      * @param formatted - Formatted Text Until Then
      * @return - After Add Links HTML Tags
      * @MatchingPattern - XX[text](link)XX
      */
-    public String formatLinks(String text, String formatted)
+    public String formatLinks(String formatted)
     {
         // Variable Definition
         String regex = "\\[(.*?)\\]\\((.*?)\\)";  // Pattern For Matching [xx](yy)
 
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = pattern.matcher(formatted);
 
         // Code Section
 
@@ -104,45 +109,28 @@ public class MarkdownParser
 
     /**
      * FormatLinks - Formatting Photos To HTML
-     * @param text - Original Text
      * @param formatted - Formatted Text Until Then
      * @return - After Add Photos HTML Tags
      * @MatchingPattern - XX![text](link)XX
      */
-    public String formatPhotos(String text, String formatted)
+    public String formatPhotos(String formatted)
     {
-        // Variable Definition
-        String regex = "!\\[(.*?)\\]\\((.*?)\\)";  // Pattern For Matching [xx](yy)
-
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(text);
-
         // Code Section
 
-        while (matcher.find())
-        {
-            // matcher.group(0) -> [text](link)
-            // matcher.group(1) -> Text
-            // matcher.group(2) -> Link
-
-            formatted = formatted.replace(matcher.group(0),
-                    "<img src = \"" + matcher.group(2) + "\" alt = \"" + matcher.group(1) +"\">");
-        }
-
-        return (formatted);
+        return (formatted.replaceAll("(?m)!\\[(.*?)\\]\\((.*?)\\)",
+                                "<img src = \"$2\" alt = \"$1\">"));
     }
 
     /***
      * formatHeading - Formatting Heading To HTML
-     * @param text - Original Text
      * @param formatted - Formatted Text Until Then
      * @return - After Add Heading HTML Tags
      * @MatchingPattern - # - ###### text
      */
-    public String formatHeading(String text, String formatted)
+    public String formatHeading(String formatted)
     {
         // Variable Definition
-        String regex   = "(?m)^\\s*(#{1,6})\\s(\\s*)(.*)"; // Pattern For Matching # text
+        String regex   = "(?m)^([ ]*)(#{1,6})\\s([ ]*.*)"; // Pattern For Matching # text
 
         // region Explain The Regex
         /*
@@ -157,22 +145,24 @@ public class MarkdownParser
         // endregion
 
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
+
+        Matcher matcher = pattern.matcher(formatted);
 
         // Code Section
 
         while (matcher.find())
         {
             // matcher.group(0) -> The Whole String Found
-            // matcher.group(1) -> The '#' Signs
-            // matcher.group(2) -> The ' ' (Space) Signs
+            // matcher.group(1) -> The Spaces Before The '#' Sign
+            // matcher.group(2) -> The '#' signs
             // matcher.group(3) -> The Text
 
 
-            formatted = formatted.replace(matcher.group(1) + " " + matcher.group(2) + matcher.group(3),
-                               "<h" + matcher.group(1).length() + ">" +
-                                                matcher.group(2) + matcher.group(3) +
-                                        "</h" + matcher.group(1).length() + ">");
+            formatted = formatted.replace(matcher.group(0),
+                               matcher.group(1) +
+                                        "<h" + matcher.group(2).length() + ">" +
+                                                matcher.group(3) +
+                                        "</h" + matcher.group(2).length() + ">");
         }
 
         return (formatted);
@@ -180,15 +170,13 @@ public class MarkdownParser
 
     /**
      * formatItalic - Formatting Italic To HTML
-     * @param text - Original Text
      * @param formatted - Formatted Text Until Then
      * @return - After Add Italic HTML Tags
      * @MatchingPattern - _xx_
      */
-    public String formatItalic(String text, String formatted)
+    public String formatItalic(String formatted)
     {
-        // Variable Definition
-        String regex   = "(?m)_(.*)_"; // Pattern For Matching _text_
+        // Code Section
 
         // region Explain The Regex
         /*
@@ -197,33 +185,19 @@ public class MarkdownParser
          */
         // endregion
 
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
-
-        // Code Section
-
-        while (matcher.find())
-        {
-            // matcher.group(0) -> The Whole String Found
-            // matcher.group(1) -> The Text Between The '_' Sign
-
-            formatted = formatted.replace(matcher.group(0), "<i>" + matcher.group(1) + "</i>");
-        }
-
-        return (formatted);
+        return ((formatted.replaceAll("(?m)_(.*)_", "<i>$1</i>")));
     }
 
     /**
      * formatBold - Formatting Bold To HTML
-     * @param text - Original Text
      * @param formatted - Formatted Text Until Then
      * @return - After Add Bold HTML Tags
      * @MatchingPattern - **xx**
      */
-    public String formatBold(String text, String formatted)
+    public String formatBold(String formatted)
     {
-        // Variable Definition
-        String regex   = "(?m)\\*\\*(.*)\\*\\*"; // Pattern For Matching **text**
+        // Code Section
+
 
         // region Explain The Regex
         /*
@@ -232,35 +206,18 @@ public class MarkdownParser
          */
         // endregion
 
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
-
-        // Code Section
-
-        while (matcher.find())
-        {
-            // matcher.group(0) -> The Whole String Found
-            // matcher.group(1) -> The Text Between The '**' Sign
-
-            formatted = formatted.replace(matcher.group(0), "<b>" + matcher.group(1) + "</b>");
-        }
-
-        //System.out.println(formatted);
-
-        return (formatted);
+        return (formatted.replaceAll("(?m)\\*\\*(.*)\\*\\*", "<b>$1</b>"));
     }
 
     /**
-     * formatBold - Formatting Bold To HTML
-     * @param text - Original Text
+     * formatBold - Formatting Strike Through To HTML
      * @param formatted - Formatted Text Until Then
-     * @return - After Add Bold HTML Tags
-     * @MatchingPattern - **xx**
+     * @return - After Add Strike Through HTML Tags
+     * @MatchingPattern - ~~xx~~
      */
-    public String formatStrikeThrough(String text, String formatted)
+    public String formatStrikeThrough(String formatted)
     {
-        // Variable Definition
-        String regex   = "(?m)~~(.*)~~"; // Pattern For Matching **text**
+        // Code Section
 
         // region Explain The Regex
         /*
@@ -269,20 +226,28 @@ public class MarkdownParser
          */
         // endregion
 
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
+        return (formatted.replaceAll("(?m)~~(.*)~~", "<del>$1</del>"));
+    }
 
+
+    /**
+     * formatBold - Formatting Horizontal Line To HTML
+     * @param formatted - Formatted Text Until Then
+     * @return - After Add Horizontal Line HTML Tags
+     * @MatchingPattern - ***+
+     */
+    public String formatHorLine(String formatted)
+    {
         // Code Section
 
-        while (matcher.find())
-        {
-            // matcher.group(0) -> The Whole String Found
-            // matcher.group(1) -> The Text Between The '~~' Sign
+        // region Explain The Regex
+        /*
+         * (?m)     - For multiline
+         * ~~(.*)~~ - Get The text Between The ~~ Must Be Between ~~xx~~
+         */
+        // endregion
 
-            formatted = formatted.replace(matcher.group(0), "<del>" + matcher.group(1) + "</del>");
-        }
-
-        return (formatted);
+        return (formatted.replaceAll("(?m)^\\*{3,}$", "<hr>"));
     }
 
     // endregion
