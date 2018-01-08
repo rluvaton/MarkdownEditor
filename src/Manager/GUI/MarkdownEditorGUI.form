@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Manager.GUI.MarkdownEditorGUI">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="CardLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="608" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="e964b" class="javax.swing.JEditorPane" binding="editorPane1" default-binding="true">
-        <constraints border-constraint="South"/>
+      <splitpane id="f590e">
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
         <properties/>
-      </component>
-      <component id="92580" class="javax.swing.JTextPane" binding="textPane1" default-binding="true">
-        <constraints border-constraint="Center"/>
-        <properties>
-          <opaque value="true"/>
-        </properties>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="709fe" class="javax.swing.JEditorPane" binding="editorPane1" default-binding="true">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="310d7" class="javax.swing.JEditorPane" binding="editorPane2" default-binding="true">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties>
+              <text value="d"/>
+            </properties>
+          </component>
+        </children>
+      </splitpane>
     </children>
   </grid>
 </form>

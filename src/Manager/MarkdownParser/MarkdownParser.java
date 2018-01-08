@@ -22,6 +22,13 @@ public class MarkdownParser
     public MarkdownParser(String text)
     {
         this.textFormat = markdownFromText(text);
+        this.textFormat = "<!DOCTYPE HTML>\n\t" +
+                                "<head>\n" +
+                                "</head>\n" +
+                                "<body>\n\t" +
+                                    this.textFormat + "\n" +
+                                "</body>\n" +
+                            "</html>";
     }
 
     public String markdownFromText(String text)
@@ -99,9 +106,9 @@ public class MarkdownParser
             // matcher.group(2) -> Link
 
             formatted = formatted.replace(matcher.group(0),
-                                "<a href = \"" + matcher.group(2) + "\">" +
+                                "<MarkdownEditorGUI href = \"" + matcher.group(2) + "\">" +
                                                            matcher.group(1) +
-                                          "</a>");
+                                          "</MarkdownEditorGUI>");
         }
         
         return (formatted);
@@ -156,7 +163,6 @@ public class MarkdownParser
             // matcher.group(1) -> The Spaces Before The '#' Sign
             // matcher.group(2) -> The '#' signs
             // matcher.group(3) -> The Text
-
 
             formatted = formatted.replace(matcher.group(0),
                                matcher.group(1) +
