@@ -21,6 +21,8 @@ Programming Language: **Java**
 - [ ] Export To HTML and PDF
 - [ ] Add Columns Selection
 - [ ] Add Sync Scroll to Live Preview
+- [ ] Autocomplete at multiline code
+- [ ] automatic add the closing characters [i.e type “ (qoutes mark) will add another 1 and put the cursor between them, same as bold (\”****\”)]
 
 ***
 ## Ground Rules For Making This Software:
