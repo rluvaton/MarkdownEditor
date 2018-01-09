@@ -6,11 +6,15 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+// For GitHub Theme
+// Link: https://gist.github.com/rluvaton/8b0145ad3670d1878b35008d06be24c9
+
 public class MarkdownEditorGUI
 {
     private JPanel panel1;
-    private JEditorPane editorPane1;
-    private JEditorPane editorPane2;
+    private JEditorPane editor;
+    private JEditorPane preview;
+    private JTabbedPane tabbedPane1;
     private JTextPane textPane1;
 
     public static void main(String[] args)
@@ -27,8 +31,10 @@ public class MarkdownEditorGUI
     {
         String html="<html><head><title>Simple Page</title></head>"; html+="<body bgcolor='#777779'><hr/><font size=50>This is Html content</font><hr/>"; html+="</body></html>";
 
+        preview.setContentType("text/html");
+        Theme theme = new Theme(2);
 
-        editorPane1.addKeyListener(new KeyAdapter()
+        editor.addKeyListener(new KeyAdapter()
         {
             @Override
             public void keyTyped(KeyEvent e)
@@ -47,8 +53,7 @@ public class MarkdownEditorGUI
             public void keyReleased(KeyEvent e)
             {
                 super.keyReleased(e);
-                editorPane2.setContentType("text/html");
-                editorPane2.setText(new MarkdownParser(editorPane1.getText()).getTextFormat());
+                preview.setText(theme.MarkdownParser(editor.getText()));
             }
         });
     }

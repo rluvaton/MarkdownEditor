@@ -10,25 +10,9 @@ import java.util.regex.Matcher;
 
 public class MarkdownParser
 {
-    private String textFormat;
-
     public MarkdownParser()
     {
-        // TODO - Add The Default Style At The Beginning
-        this.textFormat = "";
-        System.out.println(formatPhotos("  ![dscd](DDS)"));
-    }
 
-    public MarkdownParser(String text)
-    {
-        this.textFormat = markdownFromText(text);
-        this.textFormat = "<!DOCTYPE HTML>\n\t" +
-                                "<head>\n" +
-                                "</head>\n" +
-                                "<body>\n\t" +
-                                    this.textFormat + "\n" +
-                                "</body>\n" +
-                            "</html>";
     }
 
     public String markdownFromText(String text)
@@ -62,6 +46,8 @@ public class MarkdownParser
 
         // Format Strike Through
         formatted = formatStrikeThrough(formatted);
+
+        // ADD <p> if not header
 
 
         // region TODO - Markdown Rules
@@ -259,16 +245,6 @@ public class MarkdownParser
     // endregion
 
     // region Get & Set
-
-    public String getTextFormat()
-    {
-        return textFormat;
-    }
-
-    public void setTextFormat(String textFormat)
-    {
-        this.textFormat = textFormat;
-    }
 
     // endregion
 }
