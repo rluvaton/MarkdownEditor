@@ -33,3 +33,5 @@ Programming Language: **Java**
 
 ***
 > This Will Be My Project For The Next Couple Of Months
+
+> This idea was taken from John Gruber, for more information please refer to [his site](https://daringfireball.net/projects/markdown/)
