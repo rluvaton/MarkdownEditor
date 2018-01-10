@@ -3,6 +3,8 @@ package Manager.GUI;
 import Manager.MarkdownParser.MarkdownParser;
 
 import javax.swing.*;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -53,7 +55,24 @@ public class MarkdownEditorGUI
             public void keyReleased(KeyEvent e)
             {
                 super.keyReleased(e);
+
+                // TODO - Check if the key is markdown character
                 preview.setText(theme.MarkdownParser(editor.getText()));
+
+            }
+        });
+        editor.addInputMethodListener(new InputMethodListener()
+        {
+            @Override
+            public void inputMethodTextChanged(InputMethodEvent event)
+            {
+                // TODO Parse Again
+            }
+
+            @Override
+            public void caretPositionChanged(InputMethodEvent event)
+            {
+
             }
         });
     }

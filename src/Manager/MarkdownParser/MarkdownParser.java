@@ -92,9 +92,9 @@ public class MarkdownParser
             // matcher.group(2) -> Link
 
             formatted = formatted.replace(matcher.group(0),
-                                "<MarkdownEditorGUI href = \"" + matcher.group(2) + "\">" +
+                                "<a href = \"" + matcher.group(2) + "\">" +
                                                            matcher.group(1) +
-                                          "</MarkdownEditorGUI>");
+                                          "</a>");
         }
         
         return (formatted);
